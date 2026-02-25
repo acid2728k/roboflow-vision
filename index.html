@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roboflow Vision MVP</title>
+  </head>
+  <body>
+    <div id="app">
+      <aside class="panel">
+        <h1>Vision Monitor</h1>
+        <div class="metric-grid">
+          <div class="metric">
+            <span class="label">Objects</span>
+            <span id="objectsCount" class="value">0</span>
+          </div>
+          <div class="metric">
+            <span class="label">Inference FPS</span>
+            <span id="fpsValue" class="value">0.0</span>
+          </div>
+          <div class="metric">
+            <span class="label">Latency</span>
+            <span id="latencyValue" class="value">-</span>
+          </div>
+        </div>
+
+        <section>
+          <h2>Classes</h2>
+          <div id="classBars" class="class-bars"></div>
+        </section>
+
+        <section>
+          <h2>Heatmap</h2>
+          <canvas id="heatmapCanvas" width="220" height="140"></canvas>
+        </section>
+
+        <section>
+          <h2>Controls</h2>
+          <div class="control-group">
+            <label for="cameraSelect">Camera</label>
+            <select id="cameraSelect"></select>
+          </div>
+          <div class="row">
+            <button id="startBtn">Start</button>
+            <button id="stopBtn" disabled>Stop</button>
+          </div>
+          <div class="control-group">
+            <label for="thresholdInput">Threshold <span id="thresholdValue">0.45</span></label>
+            <input id="thresholdInput" type="range" min="0.1" max="0.95" step="0.05" value="0.45" />
+          </div>
+          <div class="control-group">
+            <label for="maxBoxesInput">Max boxes</label>
+            <input id="maxBoxesInput" type="number" min="1" max="200" step="1" value="30" />
+          </div>
+          <div class="control-group">
+            <label for="nmsInput">NMS IoU</label>
+            <input id="nmsInput" type="number" min="0.1" max="0.95" step="0.05" value="0.5" />
+          </div>
+          <div class="control-group">
+            <label for="inferFpsInput">Inference fps</label>
+            <input id="inferFpsInput" type="number" min="1" max="30" step="1" value="8" />
+          </div>
+          <div class="control-group">
+            <label for="captureScaleInput">Capture scale</label>
+            <select id="captureScaleInput">
+              <option value="1">1.0x</option>
+              <option value="0.75" selected>0.75x</option>
+              <option value="0.5">0.5x</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="captionIntervalInput">Caption interval (sec)</label>
+            <input id="captionIntervalInput" type="number" min="1" max="30" step="1" value="3" />
+          </div>
+          <div class="control-group">
+            <label for="apiModeInput">API mode</label>
+            <select id="apiModeInput">
+              <option value="proxy">Proxy backend</option>
+              <option value="hosted">Hosted direct</option>
+            </select>
+          </div>
+          <div class="toggles">
+            <label><input id="showBoxesToggle" type="checkbox" checked /> Show boxes</label>
+            <label><input id="showHeatmapToggle" type="checkbox" checked /> Show heatmap</label>
+            <label><input id="showCaptionToggle" type="checkbox" checked /> Show caption</label>
+          </div>
+        </section>
+
+        <section>
+          <h2>Log</h2>
+          <pre id="logOutput"></pre>
+        </section>
+      </aside>
+
+      <main class="viewer">
+        <div class="video-wrap">
+          <video id="video" autoplay playsinline muted></video>
+          <canvas id="overlay"></canvas>
+        </div>
+        <div id="captionBar" class="caption-bar">Waiting for scene description...</div>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
