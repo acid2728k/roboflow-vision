@@ -23,7 +23,7 @@ npm run dev
 Frontend: `http://localhost:5173`  
 Backend proxy: `http://localhost:8787`
 
-## API contract examples (TODO adjust to your providers)
+## API contract examples ( TODO adjust to your providers )
 
 ### Detection request
 
