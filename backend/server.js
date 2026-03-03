@@ -19,7 +19,14 @@ app.post("/api/detect", async (req, res) => {
       return res.status(400).json({ error: "Missing image field (base64 data URL)." });
     }
     if (!process.env.RF_DETECT_URL) {
-      return res.status(500).json({ error: "Missing RF_DETECT_URL in .env." });
+      // Fallback for quick demos; set RF_DETECT_URL/RF_API_KEY to enable real inference.
+      void nms;
+      const predictions = [
+        { x: 520, y: 470, width: 300, height: 650, class: "person", confidence: 0.92 },
+        { x: 760, y: 420, width: 190, height: 240, class: "banana", confidence: 0.88 },
+        { x: 220, y: 540, width: 180, height: 210, class: "cup", confidence: 0.83 }
+      ].filter((p) => p.confidence >= threshold).slice(0, maxBoxes);
+      return res.json({ predictions, mock: true });
     }
 
     const headers = { "Content-Type": "application/json" };
@@ -60,7 +67,10 @@ app.post("/api/caption", async (req, res) => {
       return res.status(400).json({ error: "Missing image field (base64 data URL)." });
     }
     if (!process.env.SMOLVLM_URL) {
-      return res.status(500).json({ error: "Missing SMOLVLM_URL in .env." });
+      return res.json({
+        caption: "A person holds a banana and a cup in a living room.",
+        mock: true
+      });
     }
 
     const headers = { "Content-Type": "application/json" };

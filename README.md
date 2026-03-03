@@ -10,18 +10,36 @@ Vanilla JS web app for object detection + scene caption:
 
 ## Quick start
 
-1. Copy `.env.example` to `.env`
-2. Fill endpoints and keys
-3. Install deps and run:
+This project runs out of the box in **mock mode** (no endpoints, no keys).
+
+1. Install deps and run:
 
 ```bash
 npm install
-npm run server
 npm run dev
 ```
 
 Frontend: `http://localhost:5173`  
-Backend proxy: `http://localhost:8787`
+
+## Enable real inference (recommended)
+
+Use the backend proxy to keep API keys out of the browser bundle.
+
+1. Copy `.env.example` to `.env` and fill your endpoints/keys.
+2. Run:
+
+```bash
+npm run server
+npm run dev
+```
+
+Backend proxy: `http://localhost:8787` (Vite proxies `/api/*` to it)
+
+## API modes
+
+- `mock`: no network calls, local demo detections/caption
+- `proxy`: frontend calls `/api/detect` and `/api/caption` (backend holds secrets)
+- `hosted`: frontend calls hosted endpoints directly (keys may be exposed)
 
 ## API contract examples ( TODO adjust to your providers )
 

@@ -1,5 +1,5 @@
 export const config = {
-  defaultApiMode: import.meta.env.VITE_API_MODE || "proxy",
+  defaultApiMode: import.meta.env.VITE_API_MODE || "mock",
   hosted: {
     rfDetectUrl: import.meta.env.VITE_RF_DETECT_URL || "",
     rfApiKey: import.meta.env.VITE_RF_API_KEY || "",
