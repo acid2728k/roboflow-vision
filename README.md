@@ -1,4 +1,4 @@
-# roboflow-vision (MVP)
+# roboflow-vision (WIP)
 
 Vanilla JS web app for object detection + scene caption:
 
