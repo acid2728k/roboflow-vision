@@ -214,6 +214,9 @@ button:disabled {
   border-radius: 12px;
   background: #070b12;
   overflow: hidden;
+  /* mirror preview horizontally so it feels like a selfie camera */
+  transform: scaleX(-1);
+  transform-origin: center;
 }
 
 video,
