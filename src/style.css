@@ -31,9 +31,14 @@ body {
 
 .panel {
   border-right: 1px solid #20283a;
-  padding: 16px;
-  overflow-y: auto;
+  padding: 10px 12px;
   background: #0d121d;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 h1,
@@ -43,16 +48,16 @@ h2 {
 }
 
 h1 {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 h2 {
-  font-size: 0.95rem;
+  font-size: 0.82rem;
   color: #9fb3d4;
 }
 
 section {
-  margin-top: 16px;
+  margin-top: 6px;
 }
 
 .metric-grid {
@@ -70,12 +75,12 @@ section {
 
 .metric .label {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: #90a4c8;
 }
 
 .metric .value {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 700;
 }
 
@@ -89,7 +94,7 @@ section {
   grid-template-columns: 80px 1fr 36px;
   align-items: center;
   gap: 8px;
-  font-size: 0.78rem;
+  font-size: 0.7rem;
 }
 
 .bar-track {
@@ -106,12 +111,12 @@ section {
 
 .control-group {
   display: grid;
-  gap: 6px;
-  margin-bottom: 10px;
+  gap: 4px;
+  margin-bottom: 6px;
 }
 
 label {
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   color: #90a4c8;
 }
 
@@ -123,7 +128,8 @@ button {
   border-radius: 8px;
   background: #121b2b;
   color: #edf2ff;
-  padding: 8px 10px;
+  padding: 6px 8px;
+  font-size: 0.78rem;
 }
 
 button {
@@ -140,13 +146,13 @@ button:disabled {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .toggles {
   display: grid;
-  gap: 6px;
-  margin-top: 10px;
+  gap: 4px;
+  margin-top: 4px;
 }
 
 .toggles label {
@@ -168,15 +174,28 @@ button:disabled {
 
 #logOutput {
   margin: 0;
-  min-height: 90px;
-  max-height: 220px;
+  min-height: 60px;
+  max-height: none;
   overflow: auto;
-  padding: 8px;
+  padding: 6px;
   border-radius: 8px;
   border: 1px solid #283552;
   background: #0a0f18;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   line-height: 1.35;
+}
+
+/* Keep all main controls visible; log section flexes and scrolls if needed */
+.panel > section:last-of-type {
+  margin-top: 4px;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel > section:last-of-type pre {
+  flex: 1 1 auto;
 }
 
 .viewer {
