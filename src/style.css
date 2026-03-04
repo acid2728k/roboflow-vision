@@ -9,16 +9,24 @@
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
-  min-height: 100vh;
+  padding: 0;
+  height: 100%;
+}
+
+body {
   background: radial-gradient(circle at top, #111824 0%, #090b11 60%);
+  overflow: hidden; /* keep whole UI inside viewport */
 }
 
 #app {
   display: grid;
   grid-template-columns: 320px 1fr;
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 .panel {
@@ -173,9 +181,11 @@ button:disabled {
 
 .viewer {
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: minmax(0, 1fr) auto;
   padding: 16px;
   gap: 10px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .video-wrap {
@@ -202,12 +212,12 @@ video,
 }
 
 .caption-bar {
-  min-height: 60px;
+  min-height: 48px;
   padding: 12px;
   border-radius: 10px;
   border: 1px solid #283552;
   background: rgba(8, 13, 20, 0.9);
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 @media (max-width: 1100px) {
