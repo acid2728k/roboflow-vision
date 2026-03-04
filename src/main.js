@@ -88,6 +88,7 @@ function hashColor(text) {
 }
 
 function clearOverlay() {
+  overlayCtx.setTransform(1, 0, 0, 1, 0, 0);
   overlayCtx.clearRect(0, 0, ui.overlay.width, ui.overlay.height);
 }
 
@@ -105,6 +106,9 @@ function drawDetections() {
   if (!showBoxes) {
     return;
   }
+  // Mirror drawing horizontally to match mirrored video element.
+  overlayCtx.save();
+  overlayCtx.setTransform(-1, 0, 0, 1, ui.overlay.width, 0);
   overlayCtx.lineWidth = 2;
   overlayCtx.font = "15px monospace";
   state.detections.forEach((det) => {
@@ -117,6 +121,7 @@ function drawDetections() {
     overlayCtx.fillStyle = "#08101b";
     overlayCtx.fillText(label, det.x + 4, Math.max(12, det.y - 5));
   });
+  overlayCtx.restore();
 }
 
 function decayHeatmap() {
