@@ -88,7 +88,6 @@ function hashColor(text) {
 }
 
 function clearOverlay() {
-  overlayCtx.setTransform(1, 0, 0, 1, 0, 0);
   overlayCtx.clearRect(0, 0, ui.overlay.width, ui.overlay.height);
 }
 
@@ -106,22 +105,26 @@ function drawDetections() {
   if (!showBoxes) {
     return;
   }
-  // Mirror drawing horizontally to match mirrored video element.
-  overlayCtx.save();
-  overlayCtx.setTransform(-1, 0, 0, 1, ui.overlay.width, 0);
   overlayCtx.lineWidth = 2;
   overlayCtx.font = "15px monospace";
   state.detections.forEach((det) => {
     const color = hashColor(det.class);
     overlayCtx.strokeStyle = color;
     overlayCtx.fillStyle = color;
-    overlayCtx.strokeRect(det.x, det.y, det.width, det.height);
+    // Mirror X coordinate numerically to match mirrored video element,
+    // while keeping text readable.
+    const mirroredX = ui.overlay.width - (det.x + det.width);
+    overlayCtx.strokeRect(mirroredX, det.y, det.width, det.height);
     const label = `${det.class} ${(det.confidence * 100).toFixed(1)}%`;
-    overlayCtx.fillRect(det.x, Math.max(0, det.y - 18), overlayCtx.measureText(label).width + 8, 18);
+    overlayCtx.fillRect(
+      mirroredX,
+      Math.max(0, det.y - 18),
+      overlayCtx.measureText(label).width + 8,
+      18
+    );
     overlayCtx.fillStyle = "#08101b";
-    overlayCtx.fillText(label, det.x + 4, Math.max(12, det.y - 5));
+    overlayCtx.fillText(label, mirroredX + 4, Math.max(12, det.y - 5));
   });
-  overlayCtx.restore();
 }
 
 function decayHeatmap() {
@@ -134,7 +137,9 @@ function decayHeatmap() {
 
 function updateHeatmapFromDetections() {
   state.detections.forEach((det) => {
-    const cx = det.x + det.width / 2;
+    // Mirror X center to align with mirrored preview.
+    const originalCx = det.x + det.width / 2;
+    const cx = ui.overlay.width - originalCx;
     const cy = det.y + det.height / 2;
     const gx = Math.floor((cx / ui.overlay.width) * state.heatGridCols);
     const gy = Math.floor((cy / ui.overlay.height) * state.heatGridRows);
