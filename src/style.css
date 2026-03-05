@@ -93,9 +93,12 @@ section {
   border-radius: 8px;
   border: 1px solid #283552;
   background: #0a0f18;
-  min-height: 60px;
-  max-height: 140px;
-  overflow: auto;
+  /* fixed height for 3 rows of chips, then vertical scroll */
+  height: 84px;
+  min-height: 84px;
+  max-height: 84px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .class-chip {
