@@ -180,13 +180,10 @@ function renderClasses() {
   ui.classBars.innerHTML = entries
     .map(([label, count]) => {
       const color = hashColor(label);
-      return `<div class="class-item" style="--accent:${color}">
-        <div class="left">
-          <span class="swatch" aria-hidden="true"></span>
-          <span class="name" title="${label}">${label}</span>
-        </div>
+      return `<span class="class-chip" style="--accent:${color}" title="${label}">
+        <span class="name">${label}</span>
         <span class="count">${count}</span>
-      </div>`;
+      </span>`;
     })
     .join("");
 }

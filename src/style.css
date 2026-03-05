@@ -86,57 +86,40 @@ section {
 
 .class-list {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
   gap: 6px;
   padding: 6px;
   border-radius: 8px;
   border: 1px solid #283552;
   background: #0a0f18;
-  min-height: 120px; /* fixed container prevents layout jumping */
-  max-height: 120px;
+  min-height: 60px;
+  max-height: 140px;
   overflow: auto;
 }
 
-.class-item {
-  display: flex;
+.class-chip {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 6px 8px;
-  border-radius: 8px;
-  border: 1px solid #263149;
-  background: #101828;
-  border-left: 5px solid var(--accent, #6aa7ff);
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--accent, #6aa7ff);
+  background: color-mix(in srgb, var(--accent, #6aa7ff) 18%, #101828);
+  width: fit-content;
+  max-width: 100%;
+  white-space: nowrap;
 }
 
-.class-item .left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-}
-
-.class-item .swatch {
-  width: 10px;
-  height: 10px;
-  border-radius: 3px;
-  background: var(--accent, #6aa7ff);
-  flex: 0 0 auto;
-}
-
-.class-item .name {
+.class-chip .name {
   font-size: 0.72rem;
   color: #d9e6ff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.class-item .count {
+.class-chip .count {
   font-variant-numeric: tabular-nums;
   font-size: 0.72rem;
   color: #9fb3d4;
-  flex: 0 0 auto;
 }
 
 .class-empty {
