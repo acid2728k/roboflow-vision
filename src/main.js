@@ -167,25 +167,25 @@ function drawHeatmap() {
   }
 }
 
-function renderClassBars() {
+function renderClasses() {
   const counts = new Map();
   state.detections.forEach((det) => {
     counts.set(det.class, (counts.get(det.class) || 0) + 1);
   });
-  const entries = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
+  const entries = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 14);
   if (!entries.length) {
-    ui.classBars.innerHTML = "<div class='class-row'>No classes yet.</div>";
+    ui.classBars.innerHTML = "<div class='class-empty'>No detections yet.</div>";
     return;
   }
-  const max = entries[0][1];
   ui.classBars.innerHTML = entries
     .map(([label, count]) => {
-      const pct = (count / max) * 100;
       const color = hashColor(label);
-      return `<div class="class-row">
-        <span>${label}</span>
-        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color};"></div></div>
-        <span>${count}</span>
+      return `<div class="class-item" style="--accent:${color}">
+        <div class="left">
+          <span class="swatch" aria-hidden="true"></span>
+          <span class="name" title="${label}">${label}</span>
+        </div>
+        <span class="count">${count}</span>
       </div>`;
     })
     .join("");
@@ -219,7 +219,7 @@ function drawFrame() {
   updateHeatmapFromDetections();
   drawHeatmap();
   updateMetrics();
-  renderClassBars();
+  renderClasses();
   state.renderRafId = requestAnimationFrame(drawFrame);
 }
 
