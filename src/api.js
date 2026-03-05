@@ -117,7 +117,14 @@ function normalizeDetection(prediction) {
 }
 
 function parseDetections(payload) {
-  const raw = payload?.predictions ?? payload?.detections ?? payload?.results ?? [];
+  const raw =
+    payload?.predictions ??
+    payload?.detections ??
+    payload?.results ??
+    payload?.outputs?.predictions ??
+    payload?.outputs?.detections ??
+    payload?.result?.predictions ??
+    [];
   if (!Array.isArray(raw)) {
     return [];
   }
