@@ -27,7 +27,7 @@ Use the backend proxy to keep API keys out of the browser bundle.
 
 **Important:** `RF_DETECT_URL` must be a **model inference** endpoint (object detection), not a **Workflow** endpoint. Workflows often do not accept base64 images in this setup. In Roboflow: open your project → **Deploy** → choose your **trained model** (e.g. object detection) → copy the **Hosted API** or **Inference** URL. Use that URL in `.env` as `RF_DETECT_URL`.
 
-1. Copy `.env.example` to `.env` and fill your endpoints/keys.
+1. Copy `.env.example` to `.env` and fill your endpoints/keys 
 2. Run:
 
 ```bash
