@@ -10,7 +10,7 @@ Vanilla JS web app for object detection + scene caption:
 
 ## Quick start
 
-This project runs out of the box in **mock mode** (no endpoints, no keys).
+This project runs out of the box in **mock mode** (no endpoints, no keys). In the final version, you will need to connect your Roboflow API for the application to work correctly.
 
 1. Install deps and run:
 
