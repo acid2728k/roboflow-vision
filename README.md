@@ -1,102 +1,83 @@
-# roboflow-vision (WIP)
+# roboflow-vision
 
-Vanilla JS web app for object detection + scene caption:
+Web app for real-time object detection and scene description using the camera. Built with vanilla JavaScript (no React/Vue), Vite, and an optional Express proxy for secure API keys.
 
-- webcam stream
-- overlay with bounding boxes
-- metrics panel (object count, fps, latency, class bars)
-- mini heatmap
-- scene caption updates every N seconds
+## Features
+
+- **Webcam stream** with optional horizontal mirror (selfie-style).
+- **Bounding boxes** overlaid on the video with class labels and confidence.
+- **Left panel**: object count, inference FPS, latency, class chips (wrap layout), mini heatmap, controls, log.
+- **Scene caption** at the bottom, updated at a configurable interval (e.g. from smolVLM or similar).
+- **Configurable**: confidence threshold, max boxes, NMS, inference FPS, capture scale, caption interval, API mode (mock / proxy / hosted).
 
 ## Quick start
 
-This project runs out of the box in **mock mode** (no endpoints, no keys). In the final version, you will need to connect your Roboflow API for the application to work correctly.
-
-1. Install deps and run:
+Runs out of the box in **mock mode** (no API keys).
 
 ```bash
 npm install
 npm run dev
 ```
 
-Frontend: `http://localhost:5173`  
+Open **http://localhost:5173**, choose a camera, and press **Start**.
 
-## Enable real inference (recommended)
+## Real inference (Roboflow + optional caption)
 
 Use the backend proxy to keep API keys out of the browser bundle.
 
-**Important:** `RF_DETECT_URL` must be a **model inference** endpoint (object detection), not a **Workflow** endpoint. Workflows often do not accept base64 images in this setup. In Roboflow: open your project → **Deploy** → choose your **trained model** (e.g. object detection) → copy the **Hosted API** or **Inference** URL. Use that URL in `.env` as `RF_DETECT_URL`.
-
-1. Copy `.env.example` to `.env` and fill your endpoints/keys 
-2. Run:
+1. Copy `.env.example` to `.env` and set:
+   - **RF_DETECT_URL** — your **model inference** endpoint (object detection), not a Workflow. In Roboflow: project → **Deploy** → your trained model → **Hosted API** / **Inference** → copy that URL.
+   - **RF_API_KEY** — Private API key from the same workspace as the model.
+   - Optionally **SMOLVLM_URL** and **SMOLVLM_API_KEY** for scene caption.
+2. Start backend and frontend:
 
 ```bash
 npm run server
 npm run dev
 ```
 
-Backend proxy: `http://localhost:8787` (Vite proxies `/api/*` to it)
+Backend: **http://localhost:8787** (Vite proxies `/api/*` to it).
 
 ## API modes
 
-- `mock`: no network calls, local demo detections/caption
-- `proxy`: frontend calls `/api/detect` and `/api/caption` (backend holds secrets)
-- `hosted`: frontend calls hosted endpoints directly (keys may be exposed)
+| Mode   | Description |
+|--------|-------------|
+| **mock**  | No network; demo detections and caption. |
+| **proxy** | Frontend calls `/api/detect` and `/api/caption`; keys stay on the backend. |
+| **hosted**| Frontend calls Roboflow/caption endpoints directly (keys in env may be exposed in the bundle). |
 
-## API contract examples ( TODO adjust to your providers )
+## Project structure
 
-### Detection request
-
-```json
-{
-  "image": "data:image/jpeg;base64,...",
-  "threshold": 0.45,
-  "max_predictions": 30,
-  "nms": 0.5
-}
+```
+roboflow-vision/
+├── index.html
+├── package.json
+├── vite.config.js
+├── .env.example       # Template; copy to .env (not committed)
+├── backend/
+│   └── server.js     # Express proxy: /api/detect, /api/caption
+└── src/
+    ├── main.js       # UI, camera, overlay, inference loop
+    ├── api.js        # Inference client (mock, proxy, hosted)
+    ├── config.js     # Env-based config
+    └── style.css
 ```
 
-### Detection response (supported parser formats)
+## Configuration
 
-```json
-{
-  "predictions": [
-    { "x": 320, "y": 220, "width": 120, "height": 90, "class": "banana", "confidence": 0.93 }
-  ]
-}
-```
+- **Environment**: all secrets and URLs in `.env` (see `.env.example`). Do not commit `.env`.
+- **Backend** reads `RF_DETECT_URL`, `RF_API_KEY`, `SMOLVLM_URL`, `SMOLVLM_API_KEY`, `BACKEND_PORT`.
+- **Frontend** (hosted mode only) uses `VITE_RF_DETECT_URL`, `VITE_RF_API_KEY`, `VITE_SMOLVLM_*`, `VITE_API_MODE`.
 
-or
+## API contract (backend ↔ Roboflow)
 
-```json
-{
-  "detections": [
-    { "xmin": 110, "ymin": 80, "xmax": 210, "ymax": 180, "label": "cup", "score": 0.89 }
-  ]
-}
-```
+**Detection request** (backend sends to Roboflow):
 
-### Caption request
+- **Legacy** (e.g. `detect.roboflow.com`): body `{ image: "<raw base64>", threshold, max_predictions, nms }`.
+- **Serverless v2** (e.g. `serverless.roboflow.com`): body `{ inputs: { image: { type: "base64", value: "<raw base64>" } }, api_key? }`, plus query params `confidence`, `overlap`, `max_detections`.
 
-```json
-{
-  "image": "data:image/jpeg;base64,...",
-  "prompt": "Describe the scene in one concise sentence."
-}
-```
+**Detection response**: backend normalizes to `{ predictions: [ { x, y, width, height, class, confidence } ] }` (center form converted to top-left where needed). Supports `predictions`, `detections`, `results`, `outputs.predictions`, etc.
 
-### Caption response (supported parser formats)
+## License
 
-```json
-{ "caption": "A person holds a banana and a cup in a living room." }
-```
-
-or
-
-```json
-{
-  "choices": [
-    { "message": { "content": "A person holds a banana and a cup in a living room." } }
-  ]
-}
-```
+Private / unlicensed unless stated otherwise.

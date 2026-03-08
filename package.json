@@ -1,6 +1,7 @@
 {
   "name": "roboflow-vision",
   "version": "0.1.0",
+  "description": "Web app for real-time object detection and scene caption from the camera (vanilla JS, Vite, optional Express proxy for Roboflow).",
   "private": true,
   "type": "module",
   "scripts": {
